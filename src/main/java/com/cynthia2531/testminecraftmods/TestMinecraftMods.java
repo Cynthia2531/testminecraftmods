@@ -2,6 +2,9 @@ package com.cynthia2531.testminecraftmods;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -12,6 +15,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -82,6 +86,15 @@ public class TestMinecraftMods
         LOGGER.info("HELLO from server starting");
     }
 
+    @SubscribeEvent
+    public void pickupItem(EntityItemPickupEvent event) {
+        ItemEntity item = event.getItem();
+        System.out.println("Item picked up!");
+        Minecraft instance =  Minecraft.getInstance();
+        LocalPlayer player = instance.player;
+        player.sendSystemMessage(item.getName());
+    }
+    
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
